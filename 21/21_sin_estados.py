@@ -6,7 +6,7 @@ from random import *
 
 #Establece las pintas disponibles#
 def pintas():
-    return ["Diamante","Pica","Corazón","Trebol"]
+    return ["DIAMANTE","PICA","CORAZON","TREBOL"]
 def nombres():
     return ["A","2","3","4","5","6","7","8","9","10","J","Q","K"]
 
@@ -49,7 +49,10 @@ def ver_mano_player(mano): #Imprime las cartas del jugador#
     print("Tienes estas cartas: "+ str(mano))
 
 def ver_mano_casa(mano): #Imprime las cartas del dealer#
-    print("La casa tiene: "+str(mano[0]))
+    print("La casa tiene: "+str(mano[0])+" y "+str("***Carta sin destapar***"))
+
+def ver_mano_casa_final(mano):
+    print("La casa tenia: "+str(mano))
 
 def repartir(mazo,dealer,player): #Reparte las cartas al principio de la partida#
     print("Repartiendo las cartas")
@@ -77,16 +80,13 @@ def quitar_cartas(mano,mazo):
     for x in mano:
         mazo.remove(mazo[mazo.index(x)])
     return mazo
-"""    
+"""
+
 
 def jugar(mazo,jugador,casa,estado,turno): #Empieza el juego de verdad#
 
-    if turno == 1: #Empieza el turno de la maquina#
-        print("El turno de la máquina comienza...")
-
-
     if  turno == 0 and estado == 0: #Empezar la partida revolviendo el mazo#
-        jugar(revolver(mazo),jugador,casa,estado+1,turno)
+        jugar((revolver(mazo)),jugador,casa,estado+1,turno)
     elif turno == 0 and estado == 1: #Repartiendo las cartas#
         jugar(repartir(mazo,casa,jugador),jugador,casa,estado+1,turno)
     elif turno == 0:
@@ -97,7 +97,7 @@ def jugar(mazo,jugador,casa,estado,turno): #Empieza el juego de verdad#
         
         if(sumar_cartas(jugador) >21):
             print("La casa GANA")
-            return False
+            ver_mano_casa_final(casa)  
         else:
             print("¿Pides otra carta?")
             print("SI/NO (S/N)")
@@ -105,12 +105,26 @@ def jugar(mazo,jugador,casa,estado,turno): #Empieza el juego de verdad#
                 jugar(pide_carta(jugador,mazo),jugador,casa,estado+1,turno)
             else: #Aqui empieza a jugar la maquina#
                 jugar(mazo,jugador,casa,0,turno+1)
+    if turno == 1: #Empieza el turno de la maquina#
+        print("El turno de la maquina comienza...")
+        ver_mano_player(jugador)
+        print("Tienes:"+str(sumar_cartas(jugador)))
+        ver_mano_casa(casa)  
+        print ("La casa tiene:"+str(sumar_cartas(casa)))
+        if(sumar_cartas(casa)<16):
+          jugar(pide_carta(casa,mazo),jugador,casa,0,turno)
+        else:    
+            if(sumar_cartas(casa)>sumar_cartas(jugador) and sumar_cartas(casa)==21 and sumar_cartas(jugador)!=21):
+              print("La casa GANA")
+              ver_mano_casa_final(casa)
+            else:
+              print("Has Ganado")
+              ver_mano_casa_final(casa)
+              print ("fin del juego")
     
 
 if __name__ == "__main__":
-    print()
-    print("21")
-    print()
+    print("Este es el juego 21")
     jugar(mazo(pintas(),nombres()),[],[],0,0)
 
 
