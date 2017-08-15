@@ -1,5 +1,6 @@
 # generador de mazo sin estados #
 # -*- coding:utf-8 -*- #
+#sample(mazo,len(mazo))#
 
 from random import *
 
@@ -23,6 +24,27 @@ def pide_carta(mano,mazo): #Pide una carta al dealer#
     mazo.remove(mazo[0])
 
     return mazo
+
+def verificar_caso(suma,mano):
+        print (mano)
+        if ('TREBOL', 'A') in mano or ('DIAMANTE', 'A') in mano or ('CORAZON', 'A') in mano or ('PICA', 'A') in mano:
+            if suma <= 10 and mano[0] == ('PICA', 'A') or mano[0] ==('DIAMANTE', 'A') or mano[0] ==('CORAZON', 'A') or mano[0] ==('TREBOL', 'A'):
+                print ("primera opcion")
+                print(mano[0])
+                return sumar_cartas(mano[1:]) + 11
+            elif suma <= 10 and mano[1] == ('DIAMANTE', 'A') or mano[1] ==('PICA', 'A') or mano[1] == ('CORAZON', 'A') or mano[1] == ('TREBOL', 'A'):
+                print ("Seg opcion")
+                return sumar_cartas(mano[0:]) + 10
+            elif suma > 10 and mano[0] == ('DIAMANTE', 'A') or mano[0] == ('PICA', 'A') or mano[0] == ('CORAZON', 'A') or mano[0] == ('TREBOL', 'A'):
+                print ("ter opcion")
+                return sumar_cartas(mano[1:]) + 11
+            elif suma > 10 and mano[1] == ('DIAMANTE', 'A') or mano[1] == ('PICA', 'A') or mano[1] == ('CORAZON', 'A') or mano[1] == ('TREBOL', 'A'):
+                print ("cuart opcion")
+                return sumar_cartas(mano[0:]) + 10
+        else:
+                print("ning op")
+                print(mano[1])
+                return sumar_cartas(mano[0:])
 
 def valor_carta(carta): #Da un valor a la carta segun su nombre#
     if carta[1] == 'J':
@@ -56,7 +78,8 @@ def ver_mano_casa_final(mano):
 
 def repartir(mazo,dealer,player): #Reparte las cartas al principio de la partida#
     print("Repartiendo las cartas")
-
+    mazo[0] = 'PICA', 'A'
+    mazo[1] = 'PICA', 'J'
     player.append(mazo[0])
     player.append(mazo[1])
     dealer.append(mazo[2])
@@ -92,7 +115,8 @@ def jugar(mazo,jugador,casa,estado,turno): #Empieza el juego de verdad#
     elif turno == 0:
         print("Tu turno comienza...")
         ver_mano_player(jugador)
-        print("Tienes:"+str(sumar_cartas(jugador)))
+       # print (verificar_caso(sumar_cartas(jugador),jugador))#
+        print("Tienes:"+str(verificar_caso(sumar_cartas(jugador),jugador)))
         ver_mano_casa(casa)
         
         if(sumar_cartas(jugador) >21):
@@ -108,10 +132,10 @@ def jugar(mazo,jugador,casa,estado,turno): #Empieza el juego de verdad#
     if turno == 1: #Empieza el turno de la maquina#
         print("El turno de la maquina comienza...")
         ver_mano_player(jugador)
-        print("Tienes:"+str(sumar_cartas(jugador)))
-        ver_mano_casa(casa)  
-        print ("La casa tiene:"+str(sumar_cartas(casa)))
-        if(sumar_cartas(casa)<16):
+        print("Tienes:"+str(verificar_caso(sumar_cartas(jugador),jugador)))
+        ver_mano_casa(casa)
+        print ("La casa tiene:"+str(verificar_caso(sumar_cartas(casa),casa)))
+        if(sumar_cartas(casa)<21):
           jugar(pide_carta(casa,mazo),jugador,casa,0,turno)
         else:    
             if(sumar_cartas(casa)>sumar_cartas(jugador) and sumar_cartas(casa)==21 and sumar_cartas(jugador)!=21):
@@ -126,5 +150,6 @@ def jugar(mazo,jugador,casa,estado,turno): #Empieza el juego de verdad#
 if __name__ == "__main__":
     print("Este es el juego 21")
     jugar(mazo(pintas(),nombres()),[],[],0,0)
+    
 
 
