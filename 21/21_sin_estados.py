@@ -1,6 +1,15 @@
 # generador de mazo sin estados #
 # -*- coding:utf-8 -*- #
 
+"""
+	21 sin estados
+	Daniel Alfonso Vargas Ortiz - 20152020009
+	Oscar Ivan Torres Pinto - 20152020044
+	Yohan Almonacid Ortiz - 20152020916
+
+"""
+
+
 from random import *
 
 
