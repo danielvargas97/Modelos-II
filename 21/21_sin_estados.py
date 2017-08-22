@@ -2,6 +2,8 @@
 # -*- coding:utf-8 -*- #
 
 """
+	Modelos de Programacion 2
+	Grupo 82
 	21 sin estados
 	Daniel Alfonso Vargas Ortiz - 20152020009
 	Oscar Ivan Torres Pinto - 20152020044
