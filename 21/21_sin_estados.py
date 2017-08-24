@@ -27,10 +27,6 @@ def mazo(pinta,nombre):#Crea el mazo de cartas#
 def revolver(mazo): #Revuelve el mazo de cartas que tenemos# 
     return sample(mazo,len(mazo))
 
-def pide_carta(mano,mazo): #Pide una carta al dealer#
-    mano.append(mazo[0])
-    mazo.remove(mazo[0])
-    return mazo
 
 def valor_carta(carta,suma): #Da un valor a la carta segun su nombre#
     if carta[1] == 'J':
@@ -53,6 +49,13 @@ def sumar_cartas(mano): #Toma cada carta y suma su valor#
     else:
         return valor_carta(mano[0]) + sumar_cartas(mano[1:])
 
+
+def add_carta(mano,carta):
+	for x in carta:
+		mano.append(carta)
+	return mano
+	
+
 def ver_mano_player(mano): #Imprime las cartas del jugador#
     print("\n Tienes estas cartas: "+ str(mano))
 
@@ -63,10 +66,6 @@ def ver_mano_casa_final(mano):#Imprime las cartas finales de la casa#
     print("\n La casa tenia: "+str(mano))
 
 def repartir(mazo,dealer,player): #Reparte las cartas al principio de la partida#
-    player.append(mazo[0])
-    player.append(mazo[1])
-    dealer.append(mazo[2])
-    dealer.append(mazo[3])
     return mazo[4:]
   
 def sumar_mano(mano,suma):
@@ -77,12 +76,14 @@ def sumar_mano(mano,suma):
 			return sumar_mano(mano[1:],suma+valor_carta(x,suma))
 
 def jugar(mazo,jugador,casa,estado,turno,suma,sumacom): #Empieza el juego de verdad#
-
     if  turno == 0 and estado == 0: #Empezar la partida revolviendo el mazo#
         jugar((revolver(mazo)),jugador,casa,estado+1,turno,suma,sumacom)
     elif turno == 0 and estado == 1: #Repartiendo las cartas#
-        jugar(repartir(mazo,casa,jugador),jugador,casa,estado+1,turno,suma,sumacom)
+        jugar(repartir(mazo,casa,jugador),jugador+mazo[0:2],casa+mazo[2:4],estado+1,turno,suma,sumacom)
     elif turno == 0:
+        print(str(mazo))
+        print()
+        print(str(jugador))
         print("\n Tu turno comienza...")
         ver_mano_player(jugador)
         print("\n Tienes: "+str(sumar_mano(jugador,suma)))
@@ -99,32 +100,30 @@ def jugar(mazo,jugador,casa,estado,turno,suma,sumacom): #Empieza el juego de ver
         else:
             print("\n ¿Pides otra carta?")
             print("  SI/NO (S/N): ")
-            if input()== 'S':
-                jugar(pide_carta(jugador,mazo),jugador,casa,estado+1,turno,suma,sumacom)
+            if raw_input()== 'S':
+                jugar(mazo[1:],add_carta(jugador,mazo[0]),casa,estado+1,turno,suma,sumacom)
             else: #Aqui empieza a jugar la maquina#
-                jugar(mazo,jugador,casa,0,turno+1,suma,sumacom)
-
-                
+                jugar(mazo,jugador,casa,0,turno+1,suma,sumacom)                
     if turno == 1: #Empieza el turno de la maquina#
-        print("\n El turno de la maquina comienza...")
-        ver_mano_player(jugador)
-        print("\n Tienes:"+str(sumar_mano(jugador,suma)))
-        ver_mano_casa(casa)
-        print ("\n La casa tiene:"+str(sumar_mano(casa,sumacom)))
-        if sumar_mano(casa,sumacom)<16:
-          jugar(pide_carta(casa,mazo),jugador,casa,0,turno,suma,sumacom)
-        else:    
-            if sumar_mano(jugador,suma)<=sumar_mano(casa,sumacom) and sumar_mano(casa,sumacom)<=21:
-              print("\n La casa GANA")
-              ver_mano_casa_final(casa)
-              print ("\n fin del juego")
-              return True
-            else:
-              print("\n Has Ganado")
-              ver_mano_casa_final(casa)
-              print ("\n fin del juego")
-              return True
-    
+		print(str(mazo))
+		print("\n El turno de la maquina comienza...")
+		ver_mano_player(jugador)
+		print("\n Tienes:"+str(sumar_mano(jugador,suma)))
+		ver_mano_casa(casa)
+		print ("\n La casa tiene:"+str(sumar_mano(casa,sumacom)))
+		if sumar_mano(casa,sumacom)<16:
+			jugar(mazo[1:],jugador,add_carta(casa,mazo[0]),0,turno,suma,sumacom)
+		else:    
+			if sumar_mano(jugador,suma)<=sumar_mano(casa,sumacom) and sumar_mano(casa,sumacom)<=21:
+				print("\n La casa GANA")
+				ver_mano_casa_final(casa)
+				print ("\n fin del juego")
+				return True
+			else:
+				print("\n Has Ganado")
+				ver_mano_casa_final(casa)
+				print ("\n fin del juego")
+				return True
 
 if __name__ == "__main__":
     print("    Este es el juego 21\n")
