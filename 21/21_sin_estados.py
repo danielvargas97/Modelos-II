@@ -51,9 +51,7 @@ def sumar_cartas(mano): #Toma cada carta y suma su valor#
 
 
 def add_carta(mano,carta):
-	for x in carta:
-		mano.append(carta)
-	return mano
+	return mano+carta
 	
 
 def ver_mano_player(mano): #Imprime las cartas del jugador#
@@ -101,7 +99,7 @@ def jugar(mazo,jugador,casa,estado,turno,suma,sumacom): #Empieza el juego de ver
             print("\n ¿Pides otra carta?")
             print("  SI/NO (S/N): ")
             if raw_input()== 'S':
-                jugar(mazo[1:],add_carta(jugador,mazo[0]),casa,estado+1,turno,suma,sumacom)
+                jugar(mazo[1:],add_carta(jugador,[mazo[0]]),casa,estado+1,turno,suma,sumacom)
             else: #Aqui empieza a jugar la maquina#
                 jugar(mazo,jugador,casa,0,turno+1,suma,sumacom)                
     if turno == 1: #Empieza el turno de la maquina#
@@ -112,7 +110,7 @@ def jugar(mazo,jugador,casa,estado,turno,suma,sumacom): #Empieza el juego de ver
 		ver_mano_casa(casa)
 		print ("\n La casa tiene:"+str(sumar_mano(casa,sumacom)))
 		if sumar_mano(casa,sumacom)<16:
-			jugar(mazo[1:],jugador,add_carta(casa,mazo[0]),0,turno,suma,sumacom)
+			jugar(mazo[1:],jugador,add_carta(casa,[mazo[0]]),0,turno,suma,sumacom)
 		else:    
 			if sumar_mano(jugador,suma)<=sumar_mano(casa,sumacom) and sumar_mano(casa,sumacom)<=21:
 				print("\n La casa GANA")
